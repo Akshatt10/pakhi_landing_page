@@ -125,28 +125,28 @@ export default function App() {
             </p>
 
             {/* Stats */}
-            <div className="flex items-center gap-8">
+            <div className="flex flex-wrap items-center gap-6 sm:gap-8 mt-6">
               <div>
-                <span className="block text-3xl font-serif font-bold text-pakhi-accent">{spotsLeft}</span>
+                <span className="block text-2xl sm:text-3xl font-serif font-bold text-pakhi-accent">{spotsLeft}</span>
                 <span className="text-xs text-white/40 uppercase tracking-wider">Spots Left</span>
               </div>
               <div className="w-px h-10 bg-white/10" />
               <div>
-                <span className="block text-3xl font-serif font-bold text-white/80">100%</span>
-                <span className="text-xs text-white/40 uppercase tracking-wider">Organic</span>
+                <span className="block text-2xl sm:text-3xl font-serif font-bold text-white/80">100%</span>
+                <span className="text-[10px] sm:text-xs text-white/40 uppercase tracking-wider">Organic</span>
               </div>
-              <div className="w-px h-10 bg-white/10" />
+              <div className="hidden sm:block w-px h-10 bg-white/10" />
               <div>
-                <span className="block text-3xl">🎁</span>
-                <span className="text-xs text-white/40 uppercase tracking-wider">Free Gifts</span>
+                <span className="block text-2xl sm:text-3xl">🎁</span>
+                <span className="text-[10px] sm:text-xs text-white/40 uppercase tracking-wider">Free Gifts</span>
               </div>
             </div>
           </div>
 
           {/* Right — Form */}
-          <div className="opacity-0 animate-slide-up relative z-20" style={{ animationDelay: '0.2s' }}>
+          <div className="opacity-0 animate-slide-up relative z-20 mt-4 lg:mt-0" style={{ animationDelay: '0.2s' }}>
             {/* Premium Glassmorphism Container */}
-            <div className="relative rounded-[2rem] p-8 sm:p-10 bg-[#120e24]/60 backdrop-blur-xl border border-white/[0.05] shadow-[0_0_80px_rgba(233,30,140,0.07)] overflow-hidden">
+            <div className="relative rounded-[2rem] p-6 sm:p-10 bg-[#120e24]/60 backdrop-blur-xl border border-white/[0.05] shadow-[0_0_80px_rgba(233,30,140,0.07)] overflow-hidden">
               {/* Inner subtle glow ring */}
               <div className="absolute inset-0 rounded-[2rem] border border-white/5 pointer-events-none" style={{ maskImage: 'linear-gradient(to bottom, white, transparent)' }}></div>
               
@@ -294,8 +294,8 @@ export default function App() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-16 sm:mt-24 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-white/25 text-xs">
+        <footer className="mt-12 sm:mt-24 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-6 pb-6">
+          <p className="text-white/25 text-[10px] sm:text-xs text-center sm:text-left">
             © {new Date().getFullYear()} MooZ Care LLP · A MooZCare Initiative
           </p>
           <div className="flex items-center gap-5">
