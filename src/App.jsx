@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function App() {
   const [form, setForm] = useState({ name: '', age: '', sex: '', email: '', phone: '' });
@@ -67,6 +67,54 @@ export default function App() {
     setSubmitting(false);
   };
 
+  const clickTimeout = useRef(null);
+  
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (clickTimeout.current !== null) {
+      // It's a double click
+      clearTimeout(clickTimeout.current);
+      clickTimeout.current = null;
+      handleAdminExport();
+    } else {
+      // Single click - wait a tiny bit to check for double click
+      clickTimeout.current = setTimeout(() => {
+        window.open('https://mypakhi.com', '_blank', 'noopener,noreferrer');
+        clickTimeout.current = null;
+      }, 300);
+    }
+  };
+
+  const handleAdminExport = async () => {
+    const code = window.prompt("Enter Admin Access Code to export database:");
+    if (!code) return;
+
+    try {
+      const res = await fetch('/api/export', {
+        headers: { 'x-admin-key': code }
+      });
+      
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Export failed: ${data.error}`);
+        return;
+      }
+
+      // Convert response stream to a downloadable blob via browser
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pakhi-launch-signups.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      alert("Error generating export. Ensure backend is running.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0A0710] relative overflow-hidden font-sans selection:bg-pink-500/30">
       {/* Premium Background Effects */}
@@ -89,9 +137,12 @@ export default function App() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
         {/* Nav */}
         <nav className="flex items-center justify-between mb-12 sm:mb-16">
-          <a href="https://mypakhi.com" target="_blank" rel="noopener noreferrer" className="opacity-90 hover:opacity-100 transition-opacity">
-            <img src="/logo.png" alt="Pakhi Logo" className="h-16 w-auto" />
-          </a>
+          <div 
+            onClick={handleLogoClick}
+            className="opacity-90 hover:opacity-100 transition-opacity cursor-pointer z-50 select-none"
+          >
+            <img src="/logo.png" alt="Pakhi Logo" className="h-16 w-auto pointer-events-none" />
+          </div>
           <a
             href="https://mypakhi.com"
             target="_blank"

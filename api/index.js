@@ -3,6 +3,7 @@ import cors from 'cors';
 import { neon } from '@neondatabase/serverless';
 import dotenv from 'dotenv';
 import path from 'path';
+import * as xlsx from 'xlsx';
 
 dotenv.config();
 const app = express();
@@ -54,6 +55,42 @@ if (!process.env.DATABASE_URL) {
       return res.status(200).json({ success: true, totalSignups });
     } catch (err) {
       return res.status(500).json({ error: 'Failed to save signup.' });
+    }
+  });
+
+  app.get('/api/export', async (req, res) => {
+    try {
+      const adminCode = process.env.ADMIN_ACCESS_CODE || 'pakhi123';
+      const providedCode = req.headers['x-admin-key'];
+
+      if (providedCode !== adminCode) {
+        return res.status(403).json({ error: 'Unauthorized. Invalid access code.' });
+      }
+
+      console.log('🔒 Admin triggered Secure Excel Export!');
+      
+      const rows = await sql`SELECT * FROM signups ORDER BY id ASC`;
+      
+      if (rows.length === 0) {
+        return res.status(404).json({ error: 'No signups yet to export.' });
+      }
+
+      // Prepare Excel workbook
+      const ws = xlsx.utils.json_to_sheet(rows);
+      const wb = xlsx.utils.book_new();
+      xlsx.utils.book_append_sheet(wb, ws, "Signups");
+
+      // Generate buffer
+      const buffer = xlsx.write(wb, { type: 'buffer', bookType: 'xlsx' });
+
+      // Send file
+      res.setHeader('Content-Disposition', 'attachment; filename="pakhi-launch-signups.xlsx"');
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      return res.status(200).send(buffer);
+      
+    } catch (err) {
+      console.error('Export Error:', err);
+      return res.status(500).json({ error: 'Failed to generate export file.' });
     }
   });
 }
