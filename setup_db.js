@@ -14,19 +14,34 @@ const sql = neon(connectionString);
 async function setup() {
   console.log('Connecting to Neon DB...');
   try {
+    // Create or update signups table with responses JSONB column
     await sql`
       CREATE TABLE IF NOT EXISTS signups (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
-        age INTEGER NOT NULL,
-        sex VARCHAR(50) NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
         phone VARCHAR(50) NOT NULL,
+        responses JSONB DEFAULT '{}',
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    console.log('\n✅ Success! Table "signups" created (or already existed).');
-    console.log('Your database is now ready for production!\n');
+
+    // If table already exists from old schema, add responses column if missing
+    await sql`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'signups' AND column_name = 'responses'
+        ) THEN
+          ALTER TABLE signups ADD COLUMN responses JSONB DEFAULT '{}';
+        END IF;
+      END
+      $$;
+    `;
+
+    console.log('\n✅ Success! Table "signups" is ready with responses JSONB column.');
+    console.log('Your database is now ready for the community onboarding flow!\n');
   } catch (err) {
     console.error('\n❌ Failed to setup database table:', err.message, '\n');
   }
