@@ -31,13 +31,13 @@ export default function StepFinal({ name, onSubmit, submitting, serverError }) {
           <div className="progress-bar"><div className="progress-bar-fill" style={{ width: '95%' }} /></div>
           <div className="eyebrow">Almost done</div>
           <h1 className="heading-main text-center">
-            You're <em className="text-pakhi-purple italic font-normal">this close</em> to our inner circle!
+            You're <em className="text-pakhi-purple italic font-normal">this close</em> to our inner circle.
           </h1>
-          <p className="text-pakhi-muted text-[15px] italic mb-1">
+          <p className="text-pakhi-muted text-[16px] italic mb-2 mt-4 font-heading">
             "This isn't for everyone. And that's what makes it special."
           </p>
-          <p className="text-pakhi-muted text-[14px] mb-7">
-            Allow us to reach out to you, {name}! <span className="text-xs text-pakhi-muted/60">(promise, we don't spam)</span>
+          <p className="text-pakhi-muted text-[15px] mb-8">
+            Allow us to reach out to you.
           </p>
 
           {serverError && (
@@ -85,7 +85,7 @@ export default function StepFinal({ name, onSubmit, submitting, serverError }) {
                 Submitting...
               </span>
             ) : (
-              'Join the Circle 🌸'
+              'Welcome to Pakhi 💛'
             )}
           </button>
         </div>

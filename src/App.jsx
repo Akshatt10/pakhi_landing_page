@@ -1,18 +1,13 @@
 import { useState, useCallback, useRef } from 'react';
-import StepIntro from './components/StepIntro';
-import StepWelcome from './components/StepWelcome';
-import StepAdjectives from './components/StepAdjectives';
-import StepImportant from './components/StepImportant';
+import ScreenHook from './components/ScreenHook';
+import ScreenName from './components/ScreenName';
+import ScreenWhoYouAre from './components/ScreenWhoYouAre';
+import ScreenCycle from './components/ScreenCycle';
 import Affirmation from './components/Affirmation';
-import StepCommunity from './components/StepCommunity';
-import StepEvents from './components/StepEvents';
-import StepAge from './components/StepAge';
-import StepPeriodCycle from './components/StepPeriodCycle';
-import StepLifestyle from './components/StepLifestyle';
 import StepFinal from './components/StepFinal';
 import StepSuccess from './components/StepSuccess';
 
-const TOTAL_STEPS = 13;
+const TOTAL_STEPS = 7;
 
 export default function App() {
   const [step, setStep] = useState(0);
@@ -101,10 +96,9 @@ export default function App() {
 
   const progressPercent = Math.min((step / (TOTAL_STEPS - 1)) * 100, 100);
 
-  // Map steps to dot groups (4 dots like in the reference)
   const getDotState = (dotIndex) => {
-    // Map 13 steps to 4 dots: 0-2=dot1, 3-5=dot2, 6-8=dot3, 9-12=dot4
-    const stepGroups = [3, 6, 9, 13];
+    // Map 7 steps to 4 dots
+    const stepGroups = [2, 4, 6, 7];
     if (step >= stepGroups[dotIndex]) return 'done';
     if (step >= (dotIndex === 0 ? 0 : stepGroups[dotIndex - 1])) return 'active';
     return '';
@@ -112,31 +106,22 @@ export default function App() {
 
   const renderStep = () => {
     switch (step) {
-      case 0: return <StepIntro onNext={advance} />;
-      case 1: return <StepWelcome name={responses.name} onNext={advance} />;
-      case 2: return <StepAdjectives onNext={advance} />;
-      case 3: return <StepImportant onNext={advance} />;
-      case 4: return <Affirmation text="That makes sense." onDone={() => goToStep(5)} />;
-      case 5: return <StepCommunity onNext={advance} />;
-      case 6: return <Affirmation text="You're not joining a community, you're returning to one." onDone={() => goToStep(7)} duration={3000} />;
-      case 7: return <StepEvents onNext={advance} />;
-      case 8: return <StepAge onNext={advance} />;
-      case 9: return <StepPeriodCycle onNext={advance} />;
-      case 10: return <StepLifestyle onNext={advance} />;
-      case 11: return <Affirmation text="We send a warm hug your way 🤗" onDone={() => goToStep(12)} />;
-      case 12: return <StepFinal name={responses.name} onSubmit={handleFinalSubmit} submitting={submitting} serverError={serverError} />;
-      case 13: return <StepSuccess name={responses.name} />;
+      case 0: return <ScreenHook onNext={advance} />;
+      case 1: return <ScreenName onNext={advance} />;
+      case 2: return <Affirmation text={`Hi, ${responses.firstName || ''}. We've been waiting for you.`} onDone={() => goToStep(3)} />;
+      case 3: return <ScreenWhoYouAre onNext={advance} />;
+      case 4: return <ScreenCycle onNext={advance} />;
+      case 5: return <Affirmation text="We've got you covered." onDone={() => goToStep(6)} />;
+      case 6: return <StepFinal name={responses.firstName} onSubmit={handleFinalSubmit} submitting={submitting} serverError={serverError} />;
+      case 7: return <StepSuccess name={responses.firstName} />;
       default: return null;
     }
   };
 
-  const isSuccessScreen = step === TOTAL_STEPS;
-
   return (
-    <div className={`min-h-screen relative overflow-hidden font-body ${isSuccessScreen ? '' : 'bg-pakhi-cream'}`}>
-      {/* Ambient floating blobs — only on light screens */}
-      {!isSuccessScreen && (
-        <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="min-h-screen relative overflow-hidden font-body bg-pakhi-cream">
+      {/* Ambient floating blobs */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-[100px] -left-[100px] w-[500px] h-[500px] rounded-full opacity-[0.22] blur-[80px] animate-drift-1"
                style={{ background: '#E8547A' }} />
           <div className="absolute -bottom-[80px] -right-[80px] w-[400px] h-[400px] rounded-full opacity-[0.22] blur-[80px] animate-drift-2"
@@ -144,10 +129,9 @@ export default function App() {
           <div className="absolute top-[40%] left-[40%] w-[300px] h-[300px] rounded-full opacity-[0.18] blur-[80px] animate-drift-3"
                style={{ background: '#F7A8BE' }} />
         </div>
-      )}
 
       {/* Top nav: logo + dot indicators */}
-      {!isSuccessScreen && (
+      {step < TOTAL_STEPS && (
         <nav className="relative z-20 px-6 sm:px-10 py-5 flex items-center justify-between max-w-4xl mx-auto">
           <div onClick={handleLogoClick} className="cursor-pointer select-none">
             <img src="/logo.png" alt="Pakhi" className="h-10 w-auto pointer-events-none" />
