@@ -8,7 +8,14 @@ dotenv.config();
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+
+// Vercel serverless pre-parses the body; only use express.json() if it hasn't been parsed yet
+app.use((req, res, next) => {
+  if (req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0) {
+    return next();
+  }
+  express.json()(req, res, next);
+});
 
 app.use((req, res, next) => {
   console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`);
@@ -33,11 +40,12 @@ if (!process.env.DATABASE_URL) {
   app.post('/api/signups', async (req, res) => {
     try {
       const {
-        name, email, phone,
-        whatBringsYou, adjectives, importantToYou,
-        communityHistory, excitingEvents,
-        ageGroup, periodCycle, cycleAwareness, lifestyle
+        firstName, lastName, email, phone,
+        whatBringsYou, ageGroup, mattersMost,
+        periodExperience, cycleAwareness
       } = req.body;
+
+      const name = `${firstName} ${lastName || ''}`.trim();
 
       // Validate required contact fields
       if (!name || !email || !phone) {
@@ -53,14 +61,10 @@ if (!process.env.DATABASE_URL) {
       // Build JSONB responses object for questionnaire data
       const responses = JSON.stringify({
         whatBringsYou: whatBringsYou || null,
-        adjectives: adjectives || null,
-        importantToYou: importantToYou || [],
-        communityHistory: communityHistory || null,
-        excitingEvents: excitingEvents || [],
         ageGroup: ageGroup || null,
-        periodCycle: periodCycle || [],
+        mattersMost: mattersMost || [],
+        periodExperience: periodExperience || null,
         cycleAwareness: cycleAwareness || null,
-        lifestyle: lifestyle || null,
       });
 
       await sql`
@@ -105,14 +109,10 @@ if (!process.env.DATABASE_URL) {
           email: row.email,
           phone: row.phone,
           what_brings_you: r.whatBringsYou || '',
-          adjectives: r.adjectives || '',
-          important_to_you: Array.isArray(r.importantToYou) ? r.importantToYou.join(', ') : '',
-          community_history: r.communityHistory || '',
-          exciting_events: Array.isArray(r.excitingEvents) ? r.excitingEvents.join(', ') : '',
           age_group: r.ageGroup || '',
-          period_cycle: Array.isArray(r.periodCycle) ? r.periodCycle.join(', ') : (r.periodCycle || ''),
+          matters_most: Array.isArray(r.mattersMost) ? r.mattersMost.join(', ') : '',
+          period_experience: r.periodExperience || '',
           cycle_awareness: r.cycleAwareness || '',
-          lifestyle: r.lifestyle || '',
           created_at: row.created_at,
         };
       });
