@@ -50,15 +50,28 @@ export default function StepSuccess({ name }) {
               ))}
             </div>
 
-            <a href="https://www.myntra.com/sanitary-napkins/pakhi/pakhi-organic-bamboo-sanitary-pads-with-panty-liner---7-pcs-xl/41703436/buy" target="_blank" rel="noopener noreferrer"
+            <a href="https://www.instagram.com/pakhi_co?igsh=bXMwcm9yNmpyM3M5" target="_blank" rel="noopener noreferrer"
                className="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-10 py-4 rounded-full bg-white text-pakhi-dark font-semibold text-[15px] transition-all duration-300 hover:-translate-y-1 opacity-0 animate-slide-up"
                style={{
                  animationDelay: '1.2s',
                  boxShadow: '0 8px 30px rgba(124, 77, 186, 0.15)',
                  border: '1px solid rgba(232, 84, 122, 0.15)'
                }}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Myntra_Logo.png" alt="Myntra" className="h-6 w-auto object-contain" />
-              Shop Pakhi on Myntra →
+              <svg className="h-6 w-6 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="ig-grad" x1="0" y1="24" x2="24" y2="0">
+                    <stop offset="0%" stopColor="#feda75"/>
+                    <stop offset="20%" stopColor="#fa7e1e"/>
+                    <stop offset="40%" stopColor="#d62976"/>
+                    <stop offset="60%" stopColor="#962fbf"/>
+                    <stop offset="100%" stopColor="#4f5bd5"/>
+                  </linearGradient>
+                </defs>
+                <rect x="2" y="2" width="20" height="20" rx="5" stroke="url(#ig-grad)" strokeWidth="2"/>
+                <circle cx="12" cy="12" r="5" stroke="url(#ig-grad)" strokeWidth="2"/>
+                <circle cx="17.5" cy="6.5" r="1.25" fill="url(#ig-grad)"/>
+              </svg>
+              Join the insider for updates →
             </a>
 
           </div>

@@ -33,7 +33,6 @@ export default function ScreenWhoYouAre({ onNext }) {
   const toggleMatter = (opt) => {
     setMatters((prev) => {
       if (prev.includes(opt)) return prev.filter((x) => x !== opt);
-      if (prev.length >= 3) return prev; // max 3
       return [...prev, opt];
     });
   };
@@ -87,7 +86,7 @@ export default function ScreenWhoYouAre({ onNext }) {
             <h2 className="heading-main text-center text-2xl sm:text-3xl">
               What <em className="text-pakhi-purple italic font-normal">matters most</em> to you right now?
             </h2>
-            <p className="text-pakhi-muted text-sm mb-5">Pick up to 3</p>
+            <p className="text-pakhi-muted text-sm mb-5">Pick all that resonate with you</p>
             <div className="flex flex-wrap justify-center gap-2">
               {MATTERS_OPTIONS.map((opt) => (
                 <button

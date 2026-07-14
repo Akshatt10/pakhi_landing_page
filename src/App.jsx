@@ -133,8 +133,8 @@ export default function App() {
       {/* Top nav: logo + dot indicators */}
       {step < TOTAL_STEPS && (
         <nav className="relative z-20 px-6 sm:px-10 py-5 flex items-center justify-between max-w-4xl mx-auto">
-          <div onClick={handleLogoClick} className="cursor-pointer select-none">
-            <img src="/logo.png" alt="Pakhi" className="h-10 w-auto pointer-events-none" />
+          <div onClick={handleLogoClick} className="cursor-pointer select-none text-2xl">
+            💖
           </div>
 
           {step > 0 && step < TOTAL_STEPS && (
